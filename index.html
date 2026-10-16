@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iamupdate | Sports News & Live Scores</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--red:#ed1c24;--dark:#10131b;--light:#f3f4f6}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--light);color:#171923}
+a{text-decoration:none;color:inherit}
+.topbar{background:#090b10;color:white;padding:19px 6%;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{font-size:30px;font-weight:900;letter-spacing:-1.5px}
+.logo span{color:var(--red)}
+.search{padding:10px 14px;border:1px solid #454752;background:#1b1e28;color:white;border-radius:5px;width:220px}
+nav{background:var(--red);color:white;padding:0 6%;display:flex;gap:28px;align-items:center;overflow-x:auto;white-space:nowrap}
+nav a{padding:16px 0;font-size:14px;font-weight:bold}
+nav a:hover{opacity:.75}
+.ticker{background:#fff;padding:15px 6%;display:flex;gap:20px;overflow-x:auto;white-space:nowrap;border-bottom:1px solid #ddd;font-size:13px}
+.live{color:var(--red);font-weight:bold}
+.container{max-width:1250px;margin:26px auto;padding:0 20px}
+.section-title{font-size:23px;font-weight:900;border-left:5px solid var(--red);padding-left:12px;margin-bottom:20px}
+.hero-grid{display:grid;grid-template-columns:2fr 1fr;gap:22px}
+.hero{min-height:380px;background:linear-gradient(0deg,rgba(0,0,0,.9),rgba(0,0,0,.05)),url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=1200&q=85') center/cover;border-radius:8px;color:white;display:flex;align-items:flex-end;padding:30px}
+.tag{display:inline-block;background:var(--red);color:white;padding:6px 10px;font-size:11px;font-weight:bold;border-radius:3px;margin-bottom:12px}
+.hero h1{font-size:clamp(27px,4vw,42px);line-height:1.12;margin-bottom:12px}
+.hero p{color:#ddd;line-height:1.6}
+.top-stories{background:white;border-radius:8px;padding:20px}
+.story{padding:15px 0;border-bottom:1px solid #e7e7e7}
+.story:last-child{border:0}
+.story small,.card small{color:var(--red);font-weight:bold;text-transform:uppercase;font-size:11px}
+.story h3{font-size:16px;line-height:1.4;margin-top:7px}
+.news-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{background:white;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px #0000000a;transition:transform .2s}
+.card:hover{transform:translateY(-4px)}
+.card img{width:100%;height:190px;object-fit:cover;display:block}
+.card-body{padding:18px}
+.card h3{font-size:19px;line-height:1.35;margin:9px 0}
+.card p{font-size:13px;color:#6b7280;line-height:1.6}
+.btn{display:inline-block;background:var(--red);color:white;padding:12px 18px;border-radius:4px;font-weight:bold;font-size:13px;margin-top:16px;border:0;cursor:pointer}
+.categories{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:25px}
+.categories button{border:1px solid #ddd;padding:10px 16px;background:white;border-radius:30px;cursor:pointer;font-weight:bold}
+.categories button.active,.categories button:hover{background:var(--red);color:white;border-color:var(--red)}
+footer{margin-top:50px;background:var(--dark);color:#bbb;text-align:center;padding:35px 20px;font-size:13px;line-height:2}
+footer strong{font-size:24px;color:white}
+.menu-btn{display:none;background:transparent;border:0;color:white;font-size:24px;cursor:pointer}
+.empty{padding:30px;background:white;border-radius:8px;grid-column:1/-1}
+@media(max-width:760px){
+ .topbar{padding:16px 5%;flex-wrap:wrap}
+ .logo{font-size:26px}
+ .search{width:100%;order:3}
+ .menu-btn{display:block}
+ nav{display:none;padding:8px 5%;flex-wrap:wrap;gap:18px}
+ nav.open{display:flex}
+ nav a{padding:10px 0}
+ .container{padding:0 14px;margin:20px auto}
+ .hero-grid{grid-template-columns:1fr}
+ .hero{min-height:320px;padding:22px}
+ .news-grid{grid-template-columns:1fr}
+ .card img{height:220px}
+ .section-title{font-size:21px}
+}
+@media(min-width:500px) and (max-width:900px){
+ .news-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="#" class="logo">iam<span>update</span></a>
+  <button class="menu-btn" onclick="toggleMenu()" aria-label="Toggle menu">☰</button>
+  <input id="search" class="search" type="search"
+    placeholder="Search sports news..." aria-label="Search news">
+</header>
+
+<nav id="nav">
+  <a href="#" onclick="filterNews('All');return false">HOME</a>
+  <a href="#latest" onclick="filterNews('Football')">FOOTBALL</a>
+  <a href="#latest" onclick="filterNews('Cricket')">CRICKET</a>
+  <a href="#latest" onclick="filterNews('Formula 1')">FORMULA 1</a>
+  <a href="#latest" onclick="filterNews('Tennis')">TENNIS</a>
+  <a href="#latest" onclick="filterNews('Basketball')">BASKETBALL</a>
+  <a href="#latest" onclick="filterNews('Other')">OTHER SPORTS</a>
+</nav>
+
+<div class="ticker">
+  <span class="live">● SPORTS CENTRE</span>
+  <span>⚽ Football updates</span>
+  <span>🏏 Cricket news</span>
+  <span>🏎 Formula 1</span>
+  <span>🎾 Tennis updates</span>
+</div>
+
+<main class="container">
+  <h2 class="section-title">TOP STORIES</h2>
+
+  <section class="hero-grid">
+    <article class="hero">
+      <div>
+        <span class="tag">FEATURED STORY</span>
+        <h1>Every Match. Every Moment. Every Update.</h1>
+        <p>Your destination for breaking sports news, match previews,
+        analysis and the biggest stories from around the world.</p>
+        <a href="#latest" class="btn">EXPLORE LATEST NEWS →</a>
+      </div>
+    </article>
+
+    <aside class="top-stories">
+      <h2 style="font-size:20px;margin-bottom:5px">Trending Now</h2>
+      <article class="story">
+        <small>Football</small>
+        <h3>Transfer Watch: The latest rumours and moves</h3>
+      </article>
+      <article class="story">
+        <small>Cricket</small>
+        <h3>Big matches, big moments: Follow the action</h3>
+      </article>
+      <article class="story">
+        <small>Formula 1</small>
+        <h3>Race weekend: Teams prepare for the challenge</h3>
+      </article>
+      <article class="story">
+        <small>Tennis</small>
+        <h3>The latest from the world tennis tour</h3>
+      </article>
+    </aside>
+  </section>
+
+  <section id="latest" style="margin-top:38px">
+    <h2 class="section-title">LATEST UPDATES</h2>
+    <div class="categories">
+      <button class="active" onclick="filterNews('All',this)">All News</button>
+      <button onclick="filterNews('Football',this)">⚽ Football</button>
+      <button onclick="filterNews('Cricket',this)">🏏 Cricket</button>
+      <button onclick="filterNews('Formula 1',this)">🏎 F1</button>
+      <button onclick="filterNews('Tennis',this)">🎾 Tennis</button>
+      <button onclick="filterNews('Basketball',this)">🏀 Basketball</button>
+    </div>
+    <div id="news" class="news-grid"></div>
+  </section>
+</main>
+
+<footer>
+  <strong>iam<span style="color:#ed1c24">update</span></strong>
+  <p>Your world of sports, all in one place.</p>
+  <p>Home · Football · Cricket · Formula 1 · Tennis</p>
+  <p>© 2026 iamupdate. All rights reserved.</p>
+  <p>Demo website — sample stories, not live news.</p>
+</footer>
+
+<script>
+const articles = [
+ {category:"Football",title:"Football's Biggest Stories: What Fans Need to Know",
+  desc:"Catch up on team news, match previews, player performances and transfer talk.",
+  img:"https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80"},
+ {category:"Cricket",title:"Cricket Central: The Latest From the Pitch",
+  desc:"Follow the action with match insights, team updates and tournament coverage.",
+  img:"https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&w=800&q=80"},
+ {category:"Formula 1",title:"Formula 1: Speed, Strategy and Race Day",
+  desc:"Explore race weekend previews, driver news and paddock developments.",
+  img:"https://images.unsplash.com/photo-1504707748692-419802cf939d?auto=format&fit=crop&w=800&q=80"},
+ {category:"Tennis",title:"Tennis Tour: The Matches to Watch",
+  desc:"Get tournament updates, player profiles and highlights from the court.",
+  img:"https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?auto=format&fit=crop&w=800&q=80"},
+ {category:"Basketball",title:"Basketball Spotlight: Stars and Highlights",
+  desc:"Discover game previews, team news and standout performances.",
+  img:"https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80"},
+ {category:"Football",title:"The Road Ahead: Fixtures and Match Previews",
+  desc:"Prepare for upcoming fixtures with our sports preview guide.",
+  img:"https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=800&q=80"}
+];
+
+let currentCategory="All";
+
+function renderNews(){
+ const query=document.getElementById("search").value.toLowerCase();
+ const filtered=articles.filter(a=>
+   (currentCategory==="All" || a.category===currentCategory ||
+    (currentCategory==="Other" && !["Football","Cricket","Formula 1","Tennis","Basketball"].includes(a.category))) &&
+   (a.title+" "+a.category+" "+a.desc).toLowerCase().includes(query)
+ );
+ const container=document.getElementById("news");
+ if(!filtered.length){
+   container.innerHTML='<div class="empty">No stories found. Try another search.</div>';
+   return;
+ }
+ container.innerHTML=filtered.map(a=>`
+  <article class="card">
+   <img src="${a.img}" alt="${a.category} sports" loading="lazy">
+   <div class="card-body">
+    <small>${a.category}</small>
+    <h3>${a.title}</h3>
+    <p>${a.desc}</p>
+    <a class="btn" href="#latest" onclick="return false">READ MORE →</a>
+   </div>
+  </article>`).join("");
+}
+
+function filterNews(category,button){
+ currentCategory=category;
+ document.querySelectorAll(".categories button").forEach(b=>b.classList.remove("active"));
+ if(button) button.classList.add("active");
+ else document.querySelectorAll(".categories button")[0].classList.add("active");
+ renderNews();
+}
+function toggleMenu(){
+ document.getElementById("nav").classList.toggle("open");
+}
+document.getElementById("search").addEventListener("input",renderNews);
+renderNews();
+</script>
+</body>
+</html>
